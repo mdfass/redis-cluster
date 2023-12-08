@@ -1,0 +1,22 @@
+version: '2'
+services:
+  redis-cluster:
+#    image: rkostiv/redis-cluster:1.0.1
+    build:
+      context: .
+      args:
+        redis_version: '6.2.7'
+    environment:
+      IP: 0.0.0.0
+      # at least 6 nodes are required for local redis cluster: 3 masters and 3 slaves
+      # so 3 masters and 1 slave per master is the minimum
+      MASTERS: 3 # number of master nodes
+      SLAVES_PER_MASTER: 1 # number of slave nodes
+
+    hostname: server
+    ports:
+      - '7000-7050:7000-7050'
+    volumes:
+      - ./redis-data:/redis-data
+      # - ./redis-config:/redis-config # uncomment for debug purposes
+

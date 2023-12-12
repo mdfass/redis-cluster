@@ -5,7 +5,11 @@ This is a Docker-based project for running a Redis Cluster locally. It is based 
 ## Pre-requisites
 
 - Docker Desktop installed
-- ports 7000-7005 available on your machine
+- A range of ports such as 7000-7005 available on your machine
+  - **NOTE** : on MacOSX it is common for port 7000 to be [taken by the "Control Center" utility](https://developer.apple.com/forums/thread/682332).
+  - You can check port availability using the following unix command : **lsof -n -i :7000 | grep LISTEN**
+  - if the port 7000 is taken we recommend first following the URL above (disable "Airplay" in System Preferences) or
+  - choose a different range such as 7100-7105
 - bash shell (for Windows users, Git Bash is recommended)
 
 ## Project structure
@@ -33,6 +37,25 @@ if for some reason 7000-7005 ports are not available on your machine, you can ch
 ```bash
 docker run -p 7100-7105:7100-7105 -e="INITIAL_PORT=7100" -it rkostiv/redis-cluster
 ````
+### Connecting a java microservice to the local Redis Cluster
+  **Redis cluster with 6 nodes is Up and Running!!!**
+
+should be the last message you see after invoking the docker run command.
+
+* Typically running your spring boot microservice locally involves choosing a profile
+(to run either inside intelliJ or from the command line).
+* the profile name used by spring boot will correspond to the suffix in your resources/application-suffix.yml
+* in your Redis configuration secion you will need to modify your port to match what you have chosen as the main port of your cluster
+* **EXAMPLE**
+* profile=local ( application-local.yml)
+* main node of cluster on port 7100
+```yaml
+ redis:
+  host: localhost
+  port: 7100
+  ssl: false
+  ...
+ ```
 
 ### Running Redis Cluster after cloning this repository
 
